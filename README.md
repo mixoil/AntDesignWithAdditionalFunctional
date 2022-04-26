@@ -1,3 +1,10 @@
+<p>
+  Original repostiory: https://github.com/ant-design-blazor/ant-design-blazor
+</p>
+<p>
+  Original docs: https://antblazor.com
+</p>
+
 <p align="center">
   <a href="https://yangshunjie.com/ant-design-blazor/">
     <img src="https://cdn.jsdelivr.net/gh/ant-design-blazor/ant-design-blazor/logo.svg?sanitize=true">
