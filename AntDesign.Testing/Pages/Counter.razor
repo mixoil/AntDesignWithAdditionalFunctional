@@ -12,7 +12,6 @@
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 <Select DataSource="@_items"
-        @ref="select"
 		@bind-Value="@_selectedValue"
 		EnableSearch
         Style="width: 200px;"
@@ -28,18 +27,11 @@
         SearchDebounceMilliseconds="500"
         IsVirtualized
         AllowClear
-        OnKeyDown="@(async (val) => await OnKey(val))">
+        EnableValueSettingByEnterBtn>
 </Select>
 
 @code
 {
-    Select<string, Item> select;
-    public async Task OnKey(KeyboardEventArgs args)
-    {
-        var a = 0;
-        await select.OnInputAsync(new ChangeEventArgs { Value = "Bebra" });
-        StateHasChanged();
-    }
 
     class Item
 	{
@@ -47,7 +39,7 @@
 		public string Label { get; set; }
 	}
 	
-    Task<string> _oldTask;
+    Task<List<Item>> _oldTask;
     List<Item> _items = new List<Item>();
 	string _selectedValue;
 	
@@ -57,20 +49,8 @@
         {
             if (_oldTask == null || _oldTask.IsCompleted)
             {
-                var key = HttpUtility.UrlEncode(value);
-                var url = $"https://suggest.taobao.com/sug?code=utf-8&q={key}";
-
-                _oldTask = Http.GetStringAsync(url);
-                var content = await _oldTask;
-
-                var result = JsonSerializer.Deserialize<ApiResult>(content);
-                _items.Clear();				
-                foreach (var item in result.result)
-                {
-                    _items.Add(new Item { Value = item[0], Label = item[0]});
-                }
-				
-				await Task.Delay(1);
+                _oldTask = Task.Run<List<Item>>(() => source.Where(i => i.Label.Contains(value.Trim())).ToList());
+                _items = await _oldTask;
                 StateHasChanged();
             }
         }
@@ -81,14 +61,26 @@
 		}
     }
 
+    List<Item> source = new List<Item>
+    {
+        new Item { Value = "1" , Label = "Lab1"},
+        new Item { Value = "11" , Label = "Lab11"},
+        new Item { Value = "2" , Label = "Lab2"},
+        new Item { Value = "3" , Label = "Lab3"},
+        new Item { Value = "4" , Label = "Lab4"},
+        new Item { Value = "5" , Label = "Lab5"},
+        new Item { Value = "6" , Label = "Lab6"},
+        new Item { Value = "7" , Label = "Lab7"},
+        new Item { Value = "8" , Label = "Lab8"},
+        new Item { Value = "11" , Label = "Lab11"},
+        new Item { Value = "121" , Label = "aLab11"},
+        new Item { Value = "113" , Label = "aaLab11"},
+        new Item { Value = "111" , Label = "Lab111"},
+    };
+
     private void OnSelectedItemChangedHandler(Item value)
     {
         Console.WriteLine($"selected: ${value?.Label}");
-    }
-
-    public class ApiResult
-    {
-        public List<string[]> result { get; set; }
     }
 
     private int currentCount = 0;

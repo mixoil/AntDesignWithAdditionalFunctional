@@ -265,6 +265,11 @@ namespace AntDesign
         [Parameter]
         public bool IsVirtualized { get; set; }
         /// <summary>
+        /// Whether select item which matches search value by Enter button.
+        /// </summary>
+        [Parameter]
+        public bool EnableValueSettingByEnterBtn { get; set; }
+        /// <summary>
         /// Whether show search input in single mode.
         /// </summary>
         [Parameter] public bool ShowSearchIcon { get; set; } = true;
@@ -1773,13 +1778,35 @@ namespace AntDesign
 
                 await SetInputBlurAsync();
             }
+            if (key == "ENTER")
+            {
+                if (EnableValueSettingByEnterBtn)
+                    await SetValueByEnterBtn();
+            }
             else if (TokenSeparators is not null && TokenSeparators.Length > 0)
             {
                 _isToken = TokenSeparators.Contains(e.Key[0]);
             }
         }
 
+        protected async Task<bool> SetValueByEnterBtn()
+        {
+            var value = _searchValue;
+            var item = SortedSelectOptionItems.Where(o => !o.IsDisabled && o.Label.Trim() == value.Trim()).FirstOrDefault();
+            if (item == null)
+                return false;
+            await SetValueAsync(item);
 
+            if (SelectMode == SelectMode.Default)
+            {
+                await CloseAsync();
+            }
+            else
+            {
+                await UpdateOverlayPositionAsync();
+            }
+            return true;
+        }
 
         /// <summary>
         /// Method is called via EventCallBack if the Input element loses the focus
