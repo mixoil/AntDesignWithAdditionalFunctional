@@ -15,6 +15,7 @@ using AntDesign.Select.Internal;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using OneOf;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 
 namespace AntDesign
@@ -264,6 +265,11 @@ namespace AntDesign
         /// </summary>
         [Parameter]
         public bool IsVirtualized { get; set; }
+        /// <summary>
+        /// ItemsProviderForVirtualization.
+        /// </summary>
+        [Parameter]
+        public ItemsProviderDelegate<SelectOptionItem<TItemValue, TItem>> VirtualizationItemsProvider { get; set; }
         /// <summary>
         /// Overscan items count. 40 by default.
         /// </summary>

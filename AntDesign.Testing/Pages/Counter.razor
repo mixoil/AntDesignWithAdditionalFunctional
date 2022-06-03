@@ -60,7 +60,6 @@
         OnSearch="@(async (value) => await OnSearch(value))"
 		OnSelectedItemChanged="OnSelectedItemChangedHandler"
         SearchDebounceMilliseconds="500"
-        MultipleInputWidth="100"
         IsVirtualized
         AllowClear
         EnableValueSettingByEnterBtn>
@@ -94,7 +93,7 @@
         {
             if (_oldTask == null || _oldTask.IsCompleted)
             {
-                _oldTask = Task.Run<List<Item>>(() => _SourceItems.Where(i => i.Label.Contains(value.Trim())).ToList());
+                _oldTask = Task.Run<List<Item>>(() => _SourceItems.Where(i => i.Label.ToLower().Contains(value.Trim().ToLower())).ToList());
                 _items = await _oldTask;
                 StateHasChanged();
             }
