@@ -265,7 +265,12 @@ namespace AntDesign
         [Parameter]
         public bool IsVirtualized { get; set; }
         /// <summary>
-        /// Whether select item which matches search value by Enter button.
+        /// Overscan items count. 40 by default.
+        /// </summary>
+        [Parameter]
+        public int VirtualizationOverscanCount { get; set; } = 40;
+        /// <summary>
+        /// /// Whether select item which matches search value by Enter button.
         /// </summary>
         [Parameter]
         public bool EnableValueSettingByEnterBtn { get; set; }
@@ -1178,7 +1183,7 @@ namespace AntDesign
         /// Method is called via EventCallBack if the value of the Input element was changed by keyboard
         /// </summary>
         /// <param name="e">Contains the value of the Input element</param>
-        public async Task OnInputAsync(ChangeEventArgs e)
+        protected async void OnInputAsync(ChangeEventArgs e)
         {
             if (e == null) throw new ArgumentNullException(nameof(e));
             if (!IsSearchEnabled)
@@ -1765,10 +1770,13 @@ namespace AntDesign
         {
             if (e == null) throw new ArgumentNullException(nameof(e));
 
-            await OnKeyDown.InvokeAsync(e);
-
             var key = e.Key.ToUpperInvariant();
 
+            if (key == "ENTER")
+            {
+                if (EnableValueSettingByEnterBtn)
+                    await SetValueByEnterBtn();
+            }
             if (key == "TAB")
             {
                 if (_dropDown.IsOverlayShow())
@@ -1777,11 +1785,6 @@ namespace AntDesign
                 }
 
                 await SetInputBlurAsync();
-            }
-            if (key == "ENTER")
-            {
-                if (EnableValueSettingByEnterBtn)
-                    await SetValueByEnterBtn();
             }
             else if (TokenSeparators is not null && TokenSeparators.Length > 0)
             {

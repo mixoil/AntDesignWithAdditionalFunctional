@@ -87,6 +87,11 @@ namespace AntDesign
         [Parameter]
         public int SearchDebounceMilliseconds { get; set; }
         /// <summary>
+        /// Fixes width of input in multiple mode
+        /// </summary>
+        [Parameter]
+        public int? MultipleInputWidth { get; set; }
+        /// <summary>
         /// Show loading indicator. You have to write the loading logic on your own.
         /// </summary>
         [Parameter] public bool Loading { get; set; }
@@ -124,10 +129,6 @@ namespace AntDesign
         /// Used for the two-way binding.
         /// </summary>
         [Parameter] public EventCallback<IEnumerable<TItemValue>> ValuesChanged { get; set; }
-        /// <summary>
-        /// Called when key downed while select in focus.
-        /// </summary>
-        [Parameter] public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
         /// <summary>
         /// The custom suffix icon.
         /// </summary>

@@ -45,7 +45,7 @@
                                         {
                                             @if (IsVirtualized)
                                             {
-                                                <Virtualize Items="@AddedTags" Context="selectOption" TItem="SelectOptionItem<TItemValue, TItem>" OverscanCount="7" >
+                                                <Virtualize Items="@AddedTags" Context="selectOption" TItem="SelectOptionItem<TItemValue, TItem>" OverscanCount="VirtualizationOverscanCount" >
                                                     <CascadingValue Value="@ItemTemplate" Name="ItemTemplate">
                                                         <CascadingValue Value="@selectOption" Name="Model">
                                                             <SelectOption
@@ -87,7 +87,7 @@
                                             {
                                                 @if (IsVirtualized)
                                                 {
-                                                    <Virtualize Items="@SortedSelectOptionItems.ToList()" Context="selectOption" TItem="SelectOptionItem<TItemValue, TItem>" OverscanCount="40">                                                   
+                                                    <Virtualize Items="@SortedSelectOptionItems.ToList()" Context="selectOption" TItem="SelectOptionItem<TItemValue, TItem>" OverscanCount="@VirtualizationOverscanCount">                                                   
                                                         <CascadingValue Value="@ItemTemplate" Name="ItemTemplate">
                                                             <CascadingValue Value="@selectOption.InternalId" Name="InternalId">
                                                                 <SelectOption
@@ -118,7 +118,8 @@
                                             else
                                             {
                                                 <CascadingValue Value="@ItemTemplate" Name="ItemTemplate">
-                                                    <SelectOptionGroup IsVirtualized="@IsVirtualized" TItemValue="TItemValue" TItem="TItem"></SelectOptionGroup>
+                                                    <SelectOptionGroup IsVirtualized="@IsVirtualized" VirtualizationOverscanCount="@VirtualizationOverscanCount"
+                                                    TItemValue="TItemValue" TItem="TItem"></SelectOptionGroup>
                                                 </CascadingValue>
                                             }
                                         }
@@ -159,6 +160,7 @@
                                                        TItem="TItem"
                                                        SearchValue="@_searchValue"
                                                        SearchDebounceMilliseconds="@SearchDebounceMilliseconds"
+                                                       MultipleInputWidth="@MultipleInputWidth"
                                                        IsOverlayShow="@_dropDown.IsOverlayShow()"
 													   MaxTagCount="@_maxTagCountAsInt"
                                                        OnInput="@OnInputAsync"

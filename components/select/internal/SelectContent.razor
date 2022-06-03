@@ -33,7 +33,7 @@
                    aria-haspopup="listbox"
                    style="@_inputStyle"/>
         </span>
-        @if (ShowPlaceholder)
+        @if (ShowPlaceholder && !_hidePlaceholder)
         {
             <span class="@Prefix-selection-placeholder">@Placeholder</span>
         }
@@ -270,7 +270,7 @@ else //ParentSelect.SelectMode != SelectMode.Default
                     <span class="@Prefix-selection-search-mirror" aria-hidden="true">&nbsp;</span>
                 </div>
             </div>
-            @if (ShowPlaceholder)
+            @if (ShowPlaceholder && !_hidePlaceholder)
             {
                 <span class="@Prefix-selection-placeholder" style="@(ParentSelect.PrefixIcon != null?"margin-left: 7px;":"")">@Placeholder</span>
             }

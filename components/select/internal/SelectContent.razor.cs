@@ -63,6 +63,7 @@ namespace AntDesign.Select.Internal
         [Parameter] public string SearchValue { get; set; }
         [Parameter] public ForwardRef RefBack { get; set; } = new ForwardRef();
         [Parameter] public int SearchDebounceMilliseconds { get; set; }
+        [Parameter] public int? MultipleInputWidth { get; set; }
         [Inject] protected IJSRuntime Js { get; set; }
         [Inject] private IDomEventListener DomEventListener { get; set; }
         protected ElementReference Ref
@@ -235,9 +236,19 @@ namespace AntDesign.Select.Internal
             }
         }
         public static int CountDown;
+
+        /// <summary>
+        /// Hides placeholder if input started.
+        /// </summary>
+        private bool _hidePlaceholder;
         private async Task OnInputChange(ChangeEventArgs e)
         {
-            if (SearchDebounceMilliseconds == 0 || ShowPlaceholder)
+            var val = e.Value?.ToString();
+            if (!string.IsNullOrEmpty(val))
+                _hidePlaceholder = true;
+            else
+                _hidePlaceholder = false;
+            if (SearchDebounceMilliseconds == 0)
             {
                 await OnInput.InvokeAsync(e);
                 return;
@@ -280,6 +291,11 @@ namespace AntDesign.Select.Internal
             }
             if (ParentSelect.SelectMode != SelectMode.Default)
             {
+                if (MultipleInputWidth.HasValue)
+                {
+                    _inputWidth = $"{_inputWidth}width: {MultipleInputWidth.Value}px;";
+                    return;
+                }
                 if (!string.IsNullOrWhiteSpace(SearchValue))
                 {
                     _inputWidth = $"{_inputWidth}width: {4 + SearchValue.Length * 8}px;";

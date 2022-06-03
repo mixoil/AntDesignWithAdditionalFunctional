@@ -15,7 +15,7 @@
 
 @if(IsVirtualized)
 {
-    <Virtualize Items="@SelectParent.SortedSelectOptionItems.ToList()" Context="selectOption" TItem="SelectOptionItem<TItemValue, TItem>" OverscanCount="7">
+    <Virtualize Items="@SelectParent.SortedSelectOptionItems.ToList()" Context="selectOption" TItem="SelectOptionItem<TItemValue, TItem>" OverscanCount="@VirtualizationOverscanCount">
         if (_oldGroupName == selectOption.GroupName)
         {
             <CascadingValue Value="@selectOption.InternalId" Name="InternalId">
@@ -62,4 +62,9 @@ else
     /// </summary>
     [Parameter]
     public bool IsVirtualized { get; set; }
+    /// <summary>
+    /// Overscan items count. 40 by default.
+    /// </summary>
+    [Parameter]
+    public int VirtualizationOverscanCount { get; set; } = 40;
 }

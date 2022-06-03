@@ -11,7 +11,7 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-<Select DataSource="@_items"
+@*<Select DataSource="@_items"
 		@bind-Value="@_selectedValue"
 		EnableSearch
         Style="width: 200px;"
@@ -19,9 +19,8 @@
 		LabelName="@nameof(Item.Label)"
 		TItemValue="string"
 		TItem="Item"
-        Placeholder="input search text"
+        Placeholder="enter and lag test"
         ShowArrowIcon="false"
-		HideNotFoundContent="true"
         OnSearch="@(async (value) => await OnSearch(value))"
 		OnSelectedItemChanged="OnSelectedItemChangedHandler"
         SearchDebounceMilliseconds="500"
@@ -29,27 +28,73 @@
         AllowClear
         EnableValueSettingByEnterBtn>
 </Select>
+<Select Mode="multiple"
+        DataSource="@_items"
+		@bind-Values="@_selectedValues"
+		EnableSearch
+        Style="width: 200px;"
+		ValueName="@nameof(Item.Value)"
+		LabelName="@nameof(Item.Label)"
+		TItemValue="string"
+		TItem="Item"
+        Placeholder="multiple lag test"
+        ShowArrowIcon="false"
+        OnSearch="@(async (value) => await OnSearch(value))"
+		OnSelectedItemsChanged="OnSelectedItemsChangedHandler"
+        SearchDebounceMilliseconds="500"
+        MultipleInputWidth="100"
+        IsVirtualized
+        AllowClear
+        EnableValueSettingByEnterBtn>
+</Select>*@
+<Select DataSource="@_items"
+		@bind-Value="@_selectedValue1"
+		EnableSearch
+        Style="width: 200px;"
+		ValueName="@nameof(Item.Value)"
+		LabelName="@nameof(Item.Label)"
+		TItemValue="string"
+		TItem="Item"
+        Placeholder="virtualization provider test"
+        ShowArrowIcon="false"
+        OnSearch="@(async (value) => await OnSearch(value))"
+		OnSelectedItemChanged="OnSelectedItemChangedHandler"
+        SearchDebounceMilliseconds="500"
+        MultipleInputWidth="100"
+        IsVirtualized
+        AllowClear
+        EnableValueSettingByEnterBtn>
+</Select>
 
 @code
 {
-
     class Item
-	{
-		public string Value { get; set; }
-		public string Label { get; set; }
-	}
-	
+    {
+        public string Value { get; set; }
+        public string Label { get; set; }
+    }
+
     Task<List<Item>> _oldTask;
     List<Item> _items = new List<Item>();
-	string _selectedValue;
-	
+    List<Item> _SourceItems = new List<Item>();
+    string _selectedValue;
+    string _selectedValue1;
+    IEnumerable<string> _selectedValues = new List<string>();
+
+    protected override Task OnInitializedAsync()
+    {
+        for (var i = 0; i < 100000; i++)
+            _SourceItems.Add(new Item { Label = $"Item {i}", Value = i.ToString() });
+        return base.OnInitializedAsync();
+    }
+
     private async Task OnSearch(string value)
     {
         if (!string.IsNullOrWhiteSpace(value))
         {
             if (_oldTask == null || _oldTask.IsCompleted)
             {
-                _oldTask = Task.Run<List<Item>>(() => source.Where(i => i.Label.Contains(value.Trim())).ToList());
+                _oldTask = Task.Run<List<Item>>(() => _SourceItems.Where(i => i.Label.Contains(value.Trim())).ToList());
                 _items = await _oldTask;
                 StateHasChanged();
             }
@@ -61,26 +106,20 @@
 		}
     }
 
-    List<Item> source = new List<Item>
-    {
-        new Item { Value = "1" , Label = "Lab1"},
-        new Item { Value = "11" , Label = "Lab11"},
-        new Item { Value = "2" , Label = "Lab2"},
-        new Item { Value = "3" , Label = "Lab3"},
-        new Item { Value = "4" , Label = "Lab4"},
-        new Item { Value = "5" , Label = "Lab5"},
-        new Item { Value = "6" , Label = "Lab6"},
-        new Item { Value = "7" , Label = "Lab7"},
-        new Item { Value = "8" , Label = "Lab8"},
-        new Item { Value = "11" , Label = "Lab11"},
-        new Item { Value = "121" , Label = "aLab11"},
-        new Item { Value = "113" , Label = "aaLab11"},
-        new Item { Value = "111" , Label = "Lab111"},
-    };
-
     private void OnSelectedItemChangedHandler(Item value)
     {
         Console.WriteLine($"selected: ${value?.Label}");
+    }
+
+    private void OnSelectedItemsChangedHandler(IEnumerable<Item> values)
+    {
+        foreach(var value in values)
+            Console.WriteLine($"selected: ${value?.Label}");
+    }
+
+    public class ApiResult
+    {
+        public List<string[]> result { get; set; }
     }
 
     private int currentCount = 0;
