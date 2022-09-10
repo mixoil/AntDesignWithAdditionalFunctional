@@ -10,7 +10,7 @@ else
     <Tabs Class="@Class" Style="@Style" Id="@Id" HideAdd Type="@TabType.EditableCard" @bind-ActiveKey="@CurrentUrl" OnClose="RemovePage" Draggable="Draggable" Size="Size">
         @foreach (var item in Pages)
         {
-            <TabPane @key="@item.Url" Key="@item.Url" Class="@TabPaneClass" Closable="item.Closable" ForceRender>
+            <TabPane @key="@item.Url" Key="@item.Url" Class="@TabPaneClass" Closable="item.Closable" ForceRender="@(!item.DontDisplayTab)" DontDisplayTab="@item.DontDisplayTab">
                 <TabTemplate>
                     @item.Title
                 </TabTemplate>
@@ -29,4 +29,62 @@ else
             </TabPane>
         }
     </Tabs>
+    @*@if (item.DontDisplayTab)
+    {
+        @if (CurrentUrl == item.Url)
+        {
+            <TabPane @key="@item.Url" Key="@item.Url" Class="@TabPaneClass" Closable="false" ForceRender>
+                <TabTemplate>
+                            
+                </TabTemplate>
+                <ChildContent>
+                    @Body(item)
+                </ChildContent>
+            </TabPane>
+        }
+        else
+        {
+                    
+        }
+    }*@
+    @*@foreach (var item in Pages)
+        {
+            @if (item.DontDisplayTab)
+            {
+                @if (CurrentUrl == item.Url)
+                {
+                    <TabPane @key="@item.Url" Key="@item.Url" Class="@TabPaneClass" Closable="false" DontDisplayTab="@item.DontDisplayTab">
+                        <TabTemplate>
+                            
+                        </TabTemplate>
+                        <ChildContent>
+                            @Body(item)
+                        </ChildContent>
+                    </TabPane>
+                }
+                else
+                {
+                    
+                }
+            }
+            else
+            {
+                <TabPane @key="@item.Url" Key="@item.Url" Class="@TabPaneClass" Closable="item.Closable">
+                    <TabTemplate>
+                        @item.Title
+                    </TabTemplate>
+                    <ChildContent>
+                        @Body(item)
+                    </ChildContent>
+                    <TabContextMenu>
+                        <Menu>
+                            <MenuItem Disabled="!item.Closable" OnClick="@(()=>{RemovePage(item.Url);})">@Locale.Close</MenuItem>
+                            <MenuItem OnClick="RemoveAll">@Locale.CloseAllTabs</MenuItem>
+                            <MenuItem OnClick="@(()=>{ RemoveOther(item.Url);})">@Locale.CloseAllButThis</MenuItem>
+                            
+                        </Menu>
+                    </TabContextMenu>
+                </TabPane>
+            }
+        }*@
 }

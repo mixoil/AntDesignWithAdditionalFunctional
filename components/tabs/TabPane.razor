@@ -6,7 +6,7 @@
     return;
 }
 
-@if (IsTab)
+@if (IsTab && !DontDisplayTab)
 {
     var ondragoverPreventDefault = _isActive;
     var onclickStopPropagation = !_isActive;

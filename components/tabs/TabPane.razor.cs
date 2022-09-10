@@ -28,6 +28,12 @@ namespace AntDesign
         public bool ForceRender { get; set; } = false;
 
         /// <summary>
+        /// Donesn't Display tab, but pane is still accessible.
+        /// </summary>
+        [Parameter]
+        public bool DontDisplayTab { get; set; } = false;
+
+        /// <summary>
         /// TabPane's key
         /// </summary>
         [Parameter]

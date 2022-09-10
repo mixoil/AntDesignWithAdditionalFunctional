@@ -12,6 +12,7 @@ namespace AntDesign
     {
         public string Title { get; set; }
         public bool Ignore { get; set; }
+        public bool DontDisplayTab { get; set; }
         public bool Closable { get; set; } = true;
     }
 }

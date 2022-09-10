@@ -20,7 +20,11 @@ namespace AntDesign
 
         private string CurrentUrl => Navmgr.Uri;
 
-        internal ReuseTabsPageItem[] Pages => _pageMap.Values.Where(x => !x.Ignore).OrderBy(x => x.CreatedAt).ToArray();
+        internal ReuseTabsPageItem[] Pages => _pageMap.Values
+            .Where(x => !x.Ignore)
+            .OrderByDescending(x => x.DontDisplayTab)
+            .ThenBy(x => x.CreatedAt).ToArray();
+        //internal ReuseTabsPageItem[] Pages => GetPages();
 
         public void RemovePage(string key)
         {
@@ -117,6 +121,7 @@ namespace AntDesign
             {
                 pageItem.Title ??= attr.Title?.ToRenderFragment();
                 pageItem.Ignore = attr.Ignore;
+                pageItem.DontDisplayTab = attr.DontDisplayTab;
                 pageItem.Closable = attr.Closable;
             }
 
