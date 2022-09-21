@@ -10,9 +10,9 @@ namespace AntDesign
 {
     public class ReuseTabsLocale
     {
-        public string Close { get; set; } = "Close";
-        public string CloseAllButThis { get; set; } = "Close All But This";
-        public string CloseAllTabs { get; set; } = "Close All Tabs";
-        public string PinTab { get; set; } = "Pin Tab";
+        public string Close { get; set; } = "Закрыть";
+        public string CloseAllButThis { get; set; } = "Закрыть все кроме этой";
+        public string CloseAllTabs { get; set; } = "Закрыть все";
+        public string PinTab { get; set; } = "Закрепить";
     }
 }
