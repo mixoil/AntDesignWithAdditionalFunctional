@@ -1480,7 +1480,8 @@ namespace AntDesign
                     if (firstActive != null && !firstActive.IsDisabled)
                     {
                         await SetValueAsync(firstActive);
-                        ClearSearch();
+                        if (AutoClearSearchValueInMultisearch)
+                            ClearSearch();
                     }
                     return;
                 }

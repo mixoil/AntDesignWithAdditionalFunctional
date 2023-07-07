@@ -47,7 +47,8 @@
         AllowClear
         EnableValueSettingByEnterBtn>
 </Select>*@
-<Select DataSource="@_items"
+<Select Mode="multiple"
+    DataSource="@_items"
 		@bind-Value="@_selectedValue1"
 		EnableSearch
         Style="width: 200px;"
@@ -62,7 +63,9 @@
         SearchDebounceMilliseconds="500"
         IsVirtualized
         AllowClear
-        EnableValueSettingByEnterBtn>
+        EnableValueSettingByEnterBtn
+        AutoClearSearchValue="false"
+        AutoClearSearchValueInMultisearch="false">
 </Select>
 
 @code
@@ -82,7 +85,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        for (var i = 0; i < 100000; i++)
+        for (var i = 0; i < 100; i++)
             _SourceItems.Add(new Item { Label = $"Item {i}", Value = i.ToString() });
         return base.OnInitializedAsync();
     }

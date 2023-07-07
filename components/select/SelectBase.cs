@@ -69,6 +69,10 @@ namespace AntDesign
         /// </summary>
         [Parameter] public bool AutoClearSearchValue { get; set; } = true;
         /// <summary>
+        /// Whether the current search will be cleared on selecting an item in multiple mode.
+        /// </summary>
+        [Parameter] public bool AutoClearSearchValueInMultisearch { get; set; } = true;
+        /// <summary>
         /// Whether the Select component is disabled.
         /// </summary>
         [Parameter] public bool Disabled { get; set; }
@@ -711,7 +715,7 @@ namespace AntDesign
                         selectOption.IsHidden = true;
                     }
 
-                    if (IsSearchEnabled && !string.IsNullOrWhiteSpace(_searchValue))
+                    if (IsSearchEnabled && !string.IsNullOrWhiteSpace(_searchValue) && AutoClearSearchValueInMultisearch)
                     {
                         ClearSearch();
                     }
